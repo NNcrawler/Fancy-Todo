@@ -1,5 +1,6 @@
 const Models = require('../models/all-models');
 const jwtprocessor = require('../helpers/jwtprocessor');
+const mongoose = require('mongoose');
 
 class Controller{
   static createTodo(req, res, next){
@@ -24,7 +25,7 @@ class Controller{
 
 
   }
-  static getAllUnfinished(req, res, next){
+  static getAllTask(req, res, next){
     jwtprocessor.verify(req.params.token)
     .then(response=>{
       let email = response.email;
@@ -38,18 +39,73 @@ class Controller{
       res.send(data)
     })
     .catch(err=>{
+      res.send({message:'gagal'})
+    })
+  }
+  static getByStatus(status){
+    return function(req, res, next){
+      jwtprocessor.verify(req.params.token)
+      .then(response=>{
+        let email = response.email;
+        return Models.User.findOne({email,'todos.status':status})
+      })
+      .then(response=>{
+        let data={message:'berhasil'};
+        if(response){
+           data.todos=response.todos
+        }else{
+          data.todos =  []
+        }
+        res.send(data)
+      })
+      .catch(err=>{
+        console.log(err);
+        res.send({message:'gagal'})
+      })
+    }
+  }
+  static toggleMark(req, res, next){
+    jwtprocessor.verify(req.body.token)
+    .then(response=>{
+      let email = response.email;
+      return Models.User.findOne({email})
+    })
+    .then(response=>{
+      if(response){
+        let todo = response.todos.id(mongoose.Types.ObjectId(req.body.id));
+        if(!todo){
+          throw 'Task not exist'
+        }
+        todo.status = todo.status=='Done' ? 'Not Done' : 'Done';
+        return response.save();
+      }else{
+        throw 'wrong token'
+      }
+    })
+    .then(response=>{
+      res.send({message:'berhasil'})
+    })
+    .catch(err=>{
       console.log(err);
       res.send({message:'gagal'})
     })
   }
-  static getAllFinished(req, res, next){
-    res.send('')
-  }
-  static markAsFinished(req, res, next){
-    res.send('')
-  }
   static deleteTask(req, res, next){
-    res.send('')
+    jwtprocessor.verify(req.body.token)
+    .then(response=>{
+      let email = response.email;
+      return Models.User.findOne({email})
+    })
+    .then(response=>{
+      response.todos.id(req.body.id).remove();
+      return response.save()
+    })
+    .then(response=>{
+      res.send({message:'berhasil'})
+    })
+    .catch(err=>{
+      res.send({message:'gagal'})
+    })
   }
 }
 
