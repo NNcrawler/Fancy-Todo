@@ -1,4 +1,6 @@
 const Models = require('../models/all-models');
+const jwtprocessor = require('../helpers/jwtprocessor');
+
 
 class Controller{
   static login(req, res, next){
@@ -6,7 +8,16 @@ class Controller{
     .then(response=>{
       if(response){
         if(response.password == req.body.password){
-          res.send({message:'berhasil'})
+          jwtprocessor.sign({
+            email:response.email,
+          }, (err, token)=>{
+            if(err){
+              throw 'Sign failed'
+            }else{
+              res.send({message:'berhasil', token})
+            }
+          })
+
         }else{
           throw 'Password doesn\'t match'
         }
