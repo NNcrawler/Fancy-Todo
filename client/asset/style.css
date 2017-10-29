@@ -1,0 +1,17 @@
+.logo{
+  font-family: 'Dancing Script', cursive;
+}
+
+.quarter-offset {
+  height: 17vh;
+}
+
+.fb-login {
+  background-color: #4267b2;
+  padding: 0px;
+}
+
+.fb-login:hover {
+  background-color: #3b5998;
+  padding: 0px;
+}
