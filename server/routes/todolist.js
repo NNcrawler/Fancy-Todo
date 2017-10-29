@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router()
 const ControllersTodolist = require('../controllers/todolist');
 
-router.get('/:username/unfinished', ControllersTodolist.getAllUnfinished);
-router.get('/:username/finished', ControllersTodolist.getAllFinished);
-router.post('/:username', ControllersTodolist.createTodo);
-router.put('/:username', ControllersTodolist.markAsFinished);
-router.delete('/:username', ControllersTodolist.deleteTask);
+router.get('/unfinished/:token', ControllersTodolist.getAllUnfinished);
+router.get('/finished/:token', ControllersTodolist.getAllFinished);
+router.post('/', ControllersTodolist.createTodo);
+router.put('/', ControllersTodolist.markAsFinished);
+router.delete('/', ControllersTodolist.deleteTask);
 
 module.exports = router;
