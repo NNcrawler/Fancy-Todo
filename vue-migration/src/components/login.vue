@@ -4,6 +4,10 @@
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
         <h1 class="logo">Fancy Todo</h1>
+        <div v-if="error != ''" class="alert alert-danger">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <strong>Oh snap!</strong>{{error}}.
+        </div>
         <div class="form-group has-success has-feedback">
           <label class="control-label" for="email">Email: </label>
           <input v-model="email" type="email" class="form-control" id="email">
@@ -33,6 +37,7 @@ export default {
       checked: false,
       email: '',
       password: '',
+      error: '',
     };
   },
   methods: {
@@ -40,7 +45,6 @@ export default {
       const data = {
         email: this.email,
         password: this.password,
-        error: '',
       };
       this.$request.post('/user/login', data)
         .then((response) => {
@@ -61,7 +65,7 @@ export default {
   mounted() {
     const user = window.localStorage.getItem('user');
     if (user) {
-      this.$router.push({ name: 'index' });
+      this.$router.push({ name: 'todo' });
     } else {
       this.checked = true;
     }
@@ -70,9 +74,6 @@ export default {
 </script>
 
 <style lang="css">
-.logo{
-  font-family: 'Dancing Script', cursive;
-}
 
 .quarter-offset {
   height: 10vh;

@@ -47,12 +47,12 @@ class Controller{
       jwtprocessor.verify(req.params.token)
       .then(response=>{
         let email = response.email;
-        return Models.User.findOne({email,'todos.status':status})
+        return Models.User.findOne({email})
       })
       .then(response=>{
         let data={message:'berhasil'};
         if(response){
-           data.todos=response.todos
+           data.todos=response.todos.filter((item) => {if(item.status === status){return item}});
         }else{
           data.todos =  []
         }
