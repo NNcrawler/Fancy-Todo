@@ -4,6 +4,7 @@ import login from '@/components/login';
 import home from '../components/home';
 import todo from '../components/todo';
 import setting from '../components/setting';
+import register from '../components/signup';
 
 Vue.use(Router);
 
@@ -13,6 +14,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: register,
     },
     {
       path: '/',
