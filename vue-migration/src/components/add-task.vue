@@ -10,6 +10,12 @@
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
           <strong>TIPS!</strong> Create task as simple and possible and as little as possible.
         </div>
+        <div v-if="message != '' && message != 'Task saved!'" class="alert alert-danger alert-dismissable">
+          <strong>Error!</strong> {{message}}.
+        </div>
+        <div v-if="message != '' && message == 'Task saved!'" class="alert alert-success alert-dismissable">
+          <strong>Error!</strong> {{message}}.
+        </div>
         <div class="row">
           <div class="col-xs-12">
             <label>Task</label>
@@ -52,12 +58,19 @@ export default {
         .then(({ data }) => {
           if (data === 'berhasil') {
             this.message = 'Task saved!';
+            let type = 'unfinished';
+            if (this.$route.path === '/task/done') {
+              type = 'finished';
+            } else if (this.$route.path === '/task/todo') {
+              type = 'unfinished';
+            }
+            this.$store.commit('updateTodo', type);
           } else {
             throw data;
           }
         })
         .catch((err) => {
-          this.message = `Oops something wrong. ${err}`;
+          this.message = `Oops something wrong. ${err.message}`;
         });
     },
   },

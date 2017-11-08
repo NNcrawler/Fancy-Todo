@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import login from '@/components/login';
 import home from '../components/home';
 import todo from '../components/todo';
+import setting from '../components/setting';
 
 Vue.use(Router);
 
@@ -19,8 +20,17 @@ export default new Router({
       component: home,
       children: [
         { name: 'todo',
-          path: '/',
+          path: '/task/todo',
           component: todo,
+        },
+        { name: 'done',
+          path: '/task/done',
+          component: todo,
+        },
+        {
+          name: 'setting',
+          path: '/setting',
+          component: setting,
         },
       ],
     },
